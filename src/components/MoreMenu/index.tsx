@@ -45,7 +45,7 @@ export default function MoreMenu({ open, close, anchorEl }: MoreMenuProps) {
                 )}
               />
               <ThemeMenuItem />
-              <GithubTokenMenuItem />
+              {/* <GithubTokenMenuItem /> */}
             </Stack>
           </Box>
         </Paper>

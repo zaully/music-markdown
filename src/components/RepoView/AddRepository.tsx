@@ -60,22 +60,23 @@ export default function AddRepository({
       </Fab>
       <Dialog open={open} aria-labelledby="add-repository-dialog">
         <DialogTitle id="add-repository-dialog-title">
-          Add Repository
+          Add Music Book
         </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="owner"
-            label="Repository Owner"
+            label="Music Book Name"
             value={owner}
             onChange={(event) => setOwner(event.target.value)}
             fullWidth
           />
           <TextField
+            type="password"
             margin="dense"
             id="name"
-            label="Repository Name"
+            label="Password"
             value={name}
             onChange={(event) => setName(event.target.value)}
             fullWidth
