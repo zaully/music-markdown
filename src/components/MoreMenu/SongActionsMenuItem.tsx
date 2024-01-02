@@ -112,7 +112,6 @@ export default function SongActionsMenuItem({
         />
         <EditViewButton closeMenu={closeMenu} />
         <SongListButton closeMenu={closeMenu} />
-        <ShowOnGitHubButton />
       </Stack>
     </Box>
   );

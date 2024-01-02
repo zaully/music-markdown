@@ -15,7 +15,9 @@ function buildBreadcrumb(previousPath: string[]) {
   // ignoreIndex matches the Route defined in App.js.
   // Certain portions are not useful to user in the breadcrumb, so we remove them.
   const ignoreIndex = [
-    0 /* /repos */, 3 /* /:viewName(browser|viewer|editor) */,
+    0 /* /repos */,
+    2 /* repo name */,
+    3 /* /:viewName(browser|viewer|editor) */,
   ];
   const keyBase = "breadcrumb-item-";
 

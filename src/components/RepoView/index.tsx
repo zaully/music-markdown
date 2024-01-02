@@ -36,7 +36,7 @@ export default function RepoViewer() {
                 <BookIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={repo.full_name} />
+            <ListItemText primary={repo.owner.login} />
             <ListItemSecondaryAction>
               <IconButton
                 aria-label="Delete"
