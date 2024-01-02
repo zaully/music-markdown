@@ -42,6 +42,55 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   const { setYouTubeId } = useYouTubeId();
   const [html, setHtml] = useState("");
   const { errorSnackbar } = useSnackbar();
+  var oldText: string | null = null
+  var sectionHighlighted: HTMLHeadingElement | null = null
+  const handleClick = (e: any) => {
+    switch (e.detail) {
+      case 2:
+        const sectionScrollTo = findNextSectionForScroll()
+        if (sectionScrollTo != null) {
+          let scale = sectionScrollTo!.getBoundingClientRect().height / sectionScrollTo!.offsetHeight
+          window.scrollTo({
+            behavior: "smooth",
+            top: sectionScrollTo!.offsetTop * scale,
+          })
+        }
+        try {
+          const anyWin: any = window
+          if (anyWin.onscrollend != null) {
+            return;
+          }
+          anyWin.onscrollend = (e: any) => {
+            highlightNextSectionForScroll()
+          }
+        } catch {}
+        break;
+    }
+  };
+  const findNextSectionForScroll = () => {
+    const sections = document.getElementsByTagName('h2');
+    if (sections.length == 0) { return null; }
+    let next = sections[0];
+    let scale = sections[0].getBoundingClientRect().height / sections[0].offsetHeight;
+    for (let i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop * scale + window.innerHeight / 4.0 > window.scrollY + window.innerHeight) {
+        break;
+      }
+      next = sections[i];
+    }
+    return next;
+  }
+  const highlightNextSectionForScroll = () => {
+    if (sectionHighlighted != null) {
+      sectionHighlighted!.textContent = oldText;
+    }
+    const next = findNextSectionForScroll()
+    if (next != null) {
+      oldText = next!.textContent;
+      next!.textContent = next!.textContent + " <======";
+    }
+    sectionHighlighted = next;
+  }
 
   useEffect(() => {
     const md = new MarkdownIt({ html: true }).use(
@@ -50,7 +99,6 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     md.setTranspose(transpose);
     md.setTheme(theme.palette.mode);
     md.setMaxWidth((width - COLUMN_GAP * (columns - 1)) / columns);
-
     try {
       setHtml(md.render(source));
       setYouTubeId(md.meta.youTubeId);
@@ -79,6 +127,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   /* TODO: Replace this hack with an iframe. */
   return (
     <div
+      onClick={handleClick}
       className={`mmd-${theme.palette.mode}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
