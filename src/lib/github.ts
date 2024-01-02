@@ -175,7 +175,7 @@ export async function getRepoMetadata(
 export async function verifyRepoExists(repo: string, { gitHubToken }: Options) {
   const response = await gitHubApiFetch(`/repos/${repo}`, { gitHubToken });
   if (response.status === 404) {
-    throw new Error(`"${repo}" not found on GitHub.`);
+    throw new Error(`Can't load the music book`);
   }
 }
 
