@@ -4,10 +4,10 @@ import { useFileContent } from "../../context/GitHubApiProvider";
 import {
   useColumns,
   useTranspose,
-  useZoom,
 } from "../../context/SongPrefsProvider";
 import { useRouteParams } from "../../lib/hooks";
 import Render from "./Render";
+import { useGlobalUserPrefInstrumentsToRender, useGlobalUserPrefZoom } from "../../context/GlobalUserPrefProvider";
 
 const DivRoot = styled("div")({
   flexGrow: 1,
@@ -19,10 +19,18 @@ export default function View() {
   const { loading, content } = useFileContent(repo, path, branch);
   const { columns } = useColumns();
   const { transpose } = useTranspose();
-  const { zoom } = useZoom();
+  const [zoom] = useGlobalUserPrefZoom();
+  const [instruments] = useGlobalUserPrefInstrumentsToRender();
 
   if (loading) {
     return <LinearProgress />;
+  }
+
+  const toRender = new Set<string>()
+  for (let i = 0; i < instruments.length; i++) {
+    if (instruments[i].rendering) {
+      toRender.add(instruments[i].code);
+    }
   }
 
   return (
@@ -32,6 +40,7 @@ export default function View() {
         columns={columns}
         transpose={transpose}
         zoom={zoom}
+        instruments={toRender}
       />
     </DivRoot>
   );

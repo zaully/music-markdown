@@ -14,6 +14,7 @@ import Render from "./Render";
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-noconflict/theme-textmate";
 import "ace-builds/src-noconflict/theme-twilight";
+import { useGlobalUserPrefInstrumentsToRender } from "../../context/GlobalUserPrefProvider";
 
 const ViewPaper = styled(Paper)(({ theme }) => ({
   paddingLeft: theme.spacing(2),
@@ -27,6 +28,14 @@ export default function Edit() {
   const { repo, path, branch } = useRouteParams();
   const editor = useEditor(repo, path, branch);
   const debouncedMarkdown = useDebounce(editor.markdown, 250);
+  const [instruments] = useGlobalUserPrefInstrumentsToRender();
+
+  const toRender = new Set<string>()
+  for (let i = 0; i < instruments.length; i++) {
+    if (instruments[i].rendering) {
+      toRender.add(instruments[i].code);
+    }
+  }
 
   return (
     <>
@@ -65,6 +74,7 @@ export default function Edit() {
               columns={1}
               transpose={transpose}
               zoom={1}
+              instruments={toRender}
             ></Render>
           </ViewPaper>
         </Grid>

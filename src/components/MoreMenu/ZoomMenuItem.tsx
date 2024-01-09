@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useZoom } from "../../context/SongPrefsProvider";
+import { useGlobalUserPrefZoom } from "../../context/GlobalUserPrefProvider";
 
 const marks = [
   { value: -2, label: "25%" },
@@ -31,7 +31,7 @@ function calculateValue(value: number) {
 }
 
 export default function ZoomMenuItem() {
-  const { zoom, setZoom } = useZoom();
+  const [zoom, setZoom] = useGlobalUserPrefZoom();
 
   return (
     <Box>

@@ -21,12 +21,14 @@ interface MusicMarkdownRenderProps {
   width: number;
   columns: number;
   transpose: number;
+  instruments: Set<string>;
 }
 
 interface MarkdownItWithMMD extends MarkdownIt {
   setTranspose: (transpose: number) => void;
   setTheme: (theme: string) => void;
   setMaxWidth: (maxWidth: number) => void;
+  setInstrumentsToShow: (instruments: Set<string>) => void;
   meta: {
     youTubeId: string;
   };
@@ -37,6 +39,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   width,
   columns,
   transpose,
+  instruments,
 }) => {
   const theme = useTheme();
   const { setYouTubeId } = useYouTubeId();
@@ -69,7 +72,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   };
   const findNextSectionForScroll = () => {
     const sections = document.getElementsByTagName('h2');
-    if (sections.length == 0) { return null; }
+    if (sections.length === 0) { return null; }
     let next = sections[0];
     let scale = sections[0].getBoundingClientRect().height / sections[0].offsetHeight;
     for (let i = 0; i < sections.length; i++) {
@@ -99,6 +102,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     md.setTranspose(transpose);
     md.setTheme(theme.palette.mode);
     md.setMaxWidth((width - COLUMN_GAP * (columns - 1)) / columns);
+    md.setInstrumentsToShow(instruments);
     try {
       setHtml(md.render(source));
       setYouTubeId(md.meta.youTubeId);
@@ -113,6 +117,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     width,
     columns,
     transpose,
+    instruments,
     theme.palette.mode,
     errorSnackbar,
   ]);
@@ -139,6 +144,7 @@ interface RenderProps {
   columns: number;
   zoom: number;
   transpose: number;
+  instruments: Set<string>;
 }
 
 export default function Render(props: RenderProps) {

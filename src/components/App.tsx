@@ -12,20 +12,23 @@ import FileViewer from "./FileView";
 import Edit from "./MusicMd/Edit";
 import View from "./MusicMd/View";
 import RepoViewer from "./RepoView";
+import { GlobalUserPrefsProvider } from "../context/GlobalUserPrefProvider";
 
 const App = () => (
   <YouTubeIdProvider>
-    <SongPrefsProvider>
-      <GitHubApiProvider>
-        <ReposProvider>
-          <ThemeProvider>
-            <SnackbarProvider>
-              <HomeRouter />
-            </SnackbarProvider>
-          </ThemeProvider>
-        </ReposProvider>
-      </GitHubApiProvider>
-    </SongPrefsProvider>
+    <GlobalUserPrefsProvider>
+      <SongPrefsProvider>
+        <GitHubApiProvider>
+          <ReposProvider>
+            <ThemeProvider>
+              <SnackbarProvider>
+                <HomeRouter />
+              </SnackbarProvider>
+            </ThemeProvider>
+          </ReposProvider>
+        </GitHubApiProvider>
+      </SongPrefsProvider>
+    </GlobalUserPrefsProvider>
   </YouTubeIdProvider>
 );
 

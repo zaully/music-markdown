@@ -10,6 +10,7 @@ import SongActionsMenuItem from "./SongActionsMenuItem";
 import ThemeMenuItem from "./ThemeMenuItem";
 import TransposeMenuItem from "./TransposeMenuItem";
 import ZoomMenuItem from "./ZoomMenuItem";
+import InstrumentsToRenderMenuItem from "./InstrumentsToRenderMenueItem";
 
 interface MoreMenuProps {
   open: boolean;
@@ -41,6 +42,7 @@ export default function MoreMenu({ open, close, anchorEl }: MoreMenuProps) {
                     <TransposeMenuItem />
                     <ZoomMenuItem />
                     <ColumnCountMenuItem />
+                    <InstrumentsToRenderMenuItem />
                   </>
                 )}
               />
