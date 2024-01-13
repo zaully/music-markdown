@@ -105,14 +105,20 @@ export function useGlobalUserPrefInstrumentsToRender(
   const { globalUserPrefs, setGlobalUserPrefs } = useGlobalUserPrefs();
   const globalUserPrefsConfig = globalUserPrefs["prefs"] || {};
 
-  const fieldValue = globalUserPrefsConfig.instruments || [
+  const defaultInstruments = [
     {name: "Lyrics", code: "l1", rendering: true},
     {name: "Notes", code: "l2", rendering: true},
-    {name: "Gt", code: "l3", rendering: true},
-    {name: "Kb", code: "l4", rendering: true},
-    {name: "Bass", code: "l5", rendering: true},
-    {name: "Drums", code: "l6", rendering: true}
+    {name: "Gt.", code: "l3", rendering: true},
+    {name: "Kb.", code: "l4", rendering: true},
+    {name: "Ba.", code: "l5", rendering: true},
+    {name: "Dr.", code: "l6", rendering: true},
+    {name: "Alt. Lyrics", code: "l7", rendering: true}
   ];
+
+  let fieldValue = globalUserPrefsConfig.instruments
+  if (fieldValue == null || fieldValue.length !== defaultInstruments.length) {
+    fieldValue = defaultInstruments;
+  }
   const setFieldValue = (newValue: InstrumentToRender[]) => {
     setGlobalUserPrefs(updateInstrumentsToRender(globalUserPrefs, newValue, defaultValue));
   }

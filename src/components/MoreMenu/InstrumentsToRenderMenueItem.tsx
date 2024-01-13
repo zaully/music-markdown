@@ -30,8 +30,8 @@ export default function InstrumentsToRenderMenuItem() {
             setInstrumentsToRender(instruments);
           }}
         >
-        {instruments.filter((instrument) => {return instrument.rendering != undefined}).map((instrument) => (
-          <ToggleButton value={instrument} key={instrument.name}>
+        {instruments.filter((instrument) => {return instrument.rendering !== undefined}).map((instrument) => (
+          <ToggleButton value={instrument} key={instrument.name} sx={{width: 1/instruments.length}}>
             {instrument.name}
           </ToggleButton>
         ))}
