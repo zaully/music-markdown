@@ -2,7 +2,7 @@
 import { createContext, FC, useContext } from "react";
 import { useLocalStorage, useRouteParams } from "../lib/hooks";
 
-interface InstrumentToRender {
+export interface InstrumentToRender {
   name: string;
   code: string;
   rendering?: boolean;
@@ -112,7 +112,7 @@ export function useGlobalUserPrefInstrumentsToRender(
     {name: "Kb.", code: "l4", rendering: true},
     {name: "Ba.", code: "l5", rendering: true},
     {name: "Dr.", code: "l6", rendering: true},
-    {name: "Alt. Lyrics", code: "l7", rendering: true}
+    {name: "Alt.", code: "l7", rendering: true}
   ];
 
   let fieldValue = globalUserPrefsConfig.instruments

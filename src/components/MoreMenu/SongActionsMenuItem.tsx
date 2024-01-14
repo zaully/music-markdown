@@ -98,21 +98,34 @@ interface SongActionsMenuItemProps {
   openQrCodeDialog: () => void;
 }
 
+const localBuild = false;
+
 export default function SongActionsMenuItem({
   closeMenu,
   openQrCodeDialog,
 }: SongActionsMenuItemProps) {
-  return (
-    <Box>
-      <Typography variant="subtitle1">Song Actions</Typography>
-      <Stack direction="column" spacing={1}>
-        <ShareButton
-          closeMenu={closeMenu}
-          openQrCodeDialog={openQrCodeDialog}
-        />
-        <EditViewButton closeMenu={closeMenu} />
-        <SongListButton closeMenu={closeMenu} />
-      </Stack>
-    </Box>
-  );
+  if (localBuild) {
+    return (
+      <Box>
+        <Typography variant="subtitle1">Song Actions</Typography>
+        <Stack direction="column" spacing={1}>
+          <ShareButton
+            closeMenu={closeMenu}
+            openQrCodeDialog={openQrCodeDialog}
+          />
+          <EditViewButton closeMenu={closeMenu} />
+          <SongListButton closeMenu={closeMenu} />
+        </Stack>
+      </Box>
+    );
+  } else {
+    return (
+      <Box>
+        <Stack direction="column" spacing={1}>
+          <EditViewButton closeMenu={closeMenu} />
+          <SongListButton closeMenu={closeMenu} />
+        </Stack>
+      </Box>
+    );
+  }
 }
