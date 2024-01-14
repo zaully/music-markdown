@@ -9,7 +9,7 @@ import { useDebounce, useRouteParams } from "../../lib/hooks";
 import DirectoryBreadcrumbs from "../DirectoryBreadcrumbs";
 import EditButtonPanel from "./EditButtonPanel";
 import { useEditor } from "./editor";
-import Render from "./Render";
+import { Render, InstrumentsConfig } from "./Render";
 
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-noconflict/theme-textmate";
@@ -30,11 +30,18 @@ export default function Edit() {
   const debouncedMarkdown = useDebounce(editor.markdown, 250);
   const [instruments] = useGlobalUserPrefInstrumentsToRender();
 
-  const toRender = new Set<string>()
-  for (let i = 0; i < instruments.length; i++) {
-    if (instruments[i].rendering) {
-      toRender.add(instruments[i].code);
+  const rendering = new Set<string>()
+  const supported = new Set<string>()
+  for (const instrument of instruments) {
+    if (instrument.rendering) {
+      rendering.add(instrument.code);
     }
+    supported.add(instrument.code);
+  }
+
+  const config: InstrumentsConfig = {
+    instrumentsToRender: rendering,
+    instrumentsSupported: supported
   }
 
   return (
@@ -74,7 +81,7 @@ export default function Edit() {
               columns={1}
               transpose={transpose}
               zoom={1}
-              instruments={toRender}
+              instrumentsConfig={config}
             ></Render>
           </ViewPaper>
         </Grid>

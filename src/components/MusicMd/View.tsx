@@ -6,7 +6,7 @@ import {
   useTranspose,
 } from "../../context/SongPrefsProvider";
 import { useRouteParams } from "../../lib/hooks";
-import Render from "./Render";
+import { Render, InstrumentsConfig } from "./Render";
 import { useGlobalUserPrefInstrumentsToRender, useGlobalUserPrefZoom } from "../../context/GlobalUserPrefProvider";
 
 const DivRoot = styled("div")({
@@ -26,11 +26,18 @@ export default function View() {
     return <LinearProgress />;
   }
 
-  const toRender = new Set<string>()
-  for (let i = 0; i < instruments.length; i++) {
-    if (instruments[i].rendering) {
-      toRender.add(instruments[i].code);
+  const rendering = new Set<string>()
+  const supported = new Set<string>()
+  for (const instrument of instruments) {
+    if (instrument.rendering) {
+      rendering.add(instrument.code);
     }
+    supported.add(instrument.code);
+  }
+
+  const config: InstrumentsConfig = {
+    instrumentsToRender: rendering,
+    instrumentsSupported: supported
   }
 
   return (
@@ -40,7 +47,7 @@ export default function View() {
         columns={columns}
         transpose={transpose}
         zoom={zoom}
-        instruments={toRender}
+        instrumentsConfig={config}
       />
     </DivRoot>
   );

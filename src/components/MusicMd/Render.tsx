@@ -21,14 +21,14 @@ interface MusicMarkdownRenderProps {
   width: number;
   columns: number;
   transpose: number;
-  instruments: Set<string>;
+  instrumentsConfig: InstrumentsConfig;
 }
 
 interface MarkdownItWithMMD extends MarkdownIt {
   setTranspose: (transpose: number) => void;
   setTheme: (theme: string) => void;
   setMaxWidth: (maxWidth: number) => void;
-  setInstrumentsToShow: (instruments: Set<string>) => void;
+  setInstrumentsConfig: (instrumentsConfig: InstrumentsConfig) => void;
   meta: {
     youTubeId: string;
   };
@@ -39,7 +39,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   width,
   columns,
   transpose,
-  instruments,
+  instrumentsConfig,
 }) => {
   const theme = useTheme();
   const { setYouTubeId } = useYouTubeId();
@@ -102,7 +102,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     md.setTranspose(transpose);
     md.setTheme(theme.palette.mode);
     md.setMaxWidth((width - COLUMN_GAP * (columns - 1)) / columns);
-    md.setInstrumentsToShow(instruments);
+    md.setInstrumentsConfig(instrumentsConfig);
     try {
       setHtml(md.render(source));
       setYouTubeId(md.meta.youTubeId);
@@ -117,7 +117,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     width,
     columns,
     transpose,
-    instruments,
+    instrumentsConfig,
     theme.palette.mode,
     errorSnackbar,
   ]);
@@ -139,15 +139,20 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   );
 };
 
+export interface InstrumentsConfig {
+  instrumentsToRender: Set<string>;
+  instrumentsSupported: Set<string>;
+}
+
 interface RenderProps {
   source: string;
   columns: number;
   zoom: number;
   transpose: number;
-  instruments: Set<string>;
+  instrumentsConfig: InstrumentsConfig;
 }
 
-export default function Render(props: RenderProps) {
+export function Render(props: RenderProps) {
   const componentRef = useRef(null);
   const { zoom } = props;
   const { width } = useContainerDimensions(componentRef, zoom);
