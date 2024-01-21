@@ -161,7 +161,9 @@ export function useTrees(repo: string, branch: string) {
     `/repos/${repo}/git/trees/${branch}?recursive=1`,
     EMPTY_TREES
   );
-  const files = value.tree.map((tree) => tree.path);
+  const files = value.tree.filter((tree) => {
+    return tree.path.length > 0 && tree.path[0] != '.';
+  }).map((tree) => tree.path);
   return { loading, value, files };
 }
 

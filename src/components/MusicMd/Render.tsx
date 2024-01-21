@@ -101,6 +101,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     ) as MarkdownItWithMMD;
     md.setTranspose(transpose);
     md.setTheme(theme.palette.mode);
+    console.log('jiocjaoi', columns);
     md.setMaxWidth((width - COLUMN_GAP * (columns - 1)) / columns);
     md.setInstrumentsConfig(instrumentsConfig);
     try {

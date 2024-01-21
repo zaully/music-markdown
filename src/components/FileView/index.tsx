@@ -53,7 +53,9 @@ export default function FileViewer() {
       <DirectoryBreadcrumbs />
       <DivRoot>
         <List key={"repo-navigation-list"}>
-          {contents.map((item) => (
+          {contents.filter((item) => {
+            return item.name.length > 0 && item.name[0] != '.';
+          }).map((item) => (
             <ListItem
               button
               component={Link}
