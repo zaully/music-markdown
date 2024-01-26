@@ -9,6 +9,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 import { useRepoMetadata, useRepos } from "../../context/ReposProvider";
 import AddRepository from "./AddRepository";
 

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 import { GitHubApiProvider } from "../context/GitHubApiProvider";
 import { ReposProvider } from "../context/ReposProvider";
 import { SnackbarProvider } from "../context/SnackbarProvider";
@@ -33,19 +33,24 @@ const App = () => (
 );
 
 const HomeRouter = () => (
-  <Router key="home-router">
-    <Route component={AppBar} />
+  <BrowserRouter>
     <Switch>
-      <Route path={`${REPO_REGEX}/viewer/:branch/:path+`} component={View} />
-      <Route
-        path={`${REPO_REGEX}/browser/:branch/:path*`}
-        component={FileViewer}
-      />
-      <Route path={`${REPO_REGEX}/editor/:branch/:path*`} component={Edit} />
-      <Route path={REPO_REGEX} component={BranchViewer} />
-      <Route path="/" component={RepoViewer} />
+      <Route exact path="/app">
+        <HashRouter>
+          <Route component={AppBar} />
+          <Route path={`${REPO_REGEX}/viewer/:branch/:path+`} component={View} />
+          <Route
+            path={`${REPO_REGEX}/browser/:branch/:path*`}
+            component={FileViewer}
+          />
+          <Route path={`${REPO_REGEX}/editor/:branch/:path*`} component={Edit} />
+          <Route path={REPO_REGEX} component={BranchViewer} />
+          <Route exact path="/" component={RepoViewer} />
+        </HashRouter>
+      </Route>
+      <Route render={() => <Redirect to="/app/" />} />
     </Switch>
-  </Router>
+  </BrowserRouter>
 );
 
 export default App;
