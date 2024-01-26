@@ -38,14 +38,16 @@ const HomeRouter = () => (
       <Route exact path="/app">
         <HashRouter>
           <Route component={AppBar} />
-          <Route path={`${REPO_REGEX}/viewer/:branch/:path+`} component={View} />
-          <Route
-            path={`${REPO_REGEX}/browser/:branch/:path*`}
-            component={FileViewer}
-          />
-          <Route path={`${REPO_REGEX}/editor/:branch/:path*`} component={Edit} />
-          <Route path={REPO_REGEX} component={BranchViewer} />
-          <Route exact path="/" component={RepoViewer} />
+          <Switch>
+            <Route path={`${REPO_REGEX}/viewer/:branch/:path+`} component={View} />
+            <Route
+              path={`${REPO_REGEX}/browser/:branch/:path*`}
+              component={FileViewer}
+            />
+            <Route path={`${REPO_REGEX}/editor/:branch/:path*`} component={Edit} />
+            <Route path={REPO_REGEX} component={BranchViewer} />
+            <Route exact path="/" component={RepoViewer} />
+          </Switch>
         </HashRouter>
       </Route>
       <Route render={() => <Redirect to="/app/" />} />

@@ -32,7 +32,7 @@ export default function QrCodeDialog({ open, close }: QrCodeDialogProps) {
           />
         </Paper>
         <DialogContentText sx={{ mt: 1 }}>
-          Scan this QR code to view the current song on your device.
+          Scan this QR code to view the current content on your device.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

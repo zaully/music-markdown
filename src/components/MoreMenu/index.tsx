@@ -11,6 +11,7 @@ import ThemeMenuItem from "./ThemeMenuItem";
 import TransposeMenuItem from "./TransposeMenuItem";
 import ZoomMenuItem from "./ZoomMenuItem";
 import InstrumentsToRenderMenuItem from "./InstrumentsToRenderMenueItem";
+import FileViewerActionsMenuItem from "./FileViewerActionsMenuItem";
 
 interface MoreMenuProps {
   open: boolean;
@@ -43,6 +44,17 @@ export default function MoreMenu({ open, close, anchorEl }: MoreMenuProps) {
                     <ZoomMenuItem />
                     <ColumnCountMenuItem />
                     <InstrumentsToRenderMenuItem />
+                  </>
+                )}
+              />
+              <Route
+                path={`${REPO_REGEX}/browser/:branch/:path*`}
+                render={() => (
+                  <>
+                    <FileViewerActionsMenuItem
+                    closeMenu={close}
+                    openQrCodeDialog={() => setQrCodeDialogOpen(true)}
+                    />
                   </>
                 )}
               />

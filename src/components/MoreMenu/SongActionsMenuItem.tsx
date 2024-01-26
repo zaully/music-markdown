@@ -122,6 +122,10 @@ export default function SongActionsMenuItem({
     return (
       <Box>
         <Stack direction="column" spacing={1}>
+          <ShareButton
+            closeMenu={closeMenu}
+            openQrCodeDialog={openQrCodeDialog}
+          />
           <EditViewButton closeMenu={closeMenu} />
           <SongListButton closeMenu={closeMenu} />
         </Stack>
