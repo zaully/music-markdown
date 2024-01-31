@@ -5,7 +5,7 @@ import { SnackbarProvider } from "../context/SnackbarProvider";
 import { SongPrefsProvider } from "../context/SongPrefsProvider";
 import { ThemeProvider } from "../context/ThemeProvider";
 import { YouTubeIdProvider } from "../context/YouTubeIdProvider";
-import { REPO_REGEX } from "../lib/constants";
+import { REPO_REGEX, REPO_REGEX_ONLY_ACCOUNT } from "../lib/constants";
 import AppBar from "./AppBar";
 import BranchViewer from "./BranchView";
 import FileViewer from "./FileView";
@@ -46,6 +46,7 @@ const HomeRouter = () => (
             />
             <Route path={`${REPO_REGEX}/editor/:branch/:path*`} component={Edit} />
             <Route path={REPO_REGEX} component={BranchViewer} />
+            {/* <Route path={REPO_REGEX_ONLY_ACCOUNT} component={BranchViewer} /> */}
             <Route exact path="/" component={RepoViewer} />
           </Switch>
         </HashRouter>

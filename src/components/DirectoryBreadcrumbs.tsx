@@ -42,6 +42,10 @@ function buildBreadcrumb(previousPath: string[]) {
         </Typography>
       );
     } else {
+      if (i === 1 && i < previousPath.length - 1) {
+        const directory = previousPath[i + 1];
+        currDir = currDir.concat("/", directory);
+      }
       breadcrumbItems.push(
         <Link
           role="breadcrumb"
