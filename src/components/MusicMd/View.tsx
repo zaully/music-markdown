@@ -8,6 +8,7 @@ import {
 import { useRouteParams } from "../../lib/hooks";
 import { Render, InstrumentsConfig } from "./Render";
 import { useGlobalUserPrefInstrumentsToRender, useGlobalUserPrefZoom } from "../../context/GlobalUserPrefProvider";
+import DirectoryBreadcrumbs from "../DirectoryBreadcrumbs";
 
 const DivRoot = styled("div")({
   flexGrow: 1,
@@ -41,14 +42,17 @@ export default function View() {
   }
 
   return (
-    <DivRoot>
-      <Render
-        source={content}
-        columns={columns}
-        transpose={transpose}
-        zoom={zoom}
-        instrumentsConfig={config}
-      />
-    </DivRoot>
+    <>
+      <DirectoryBreadcrumbs />
+      <DivRoot>
+        <Render
+          source={content}
+          columns={columns}
+          transpose={transpose}
+          zoom={zoom}
+          instrumentsConfig={config}
+        />
+      </DivRoot>
+    </>
   );
 }

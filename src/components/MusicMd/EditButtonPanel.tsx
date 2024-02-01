@@ -6,8 +6,9 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Button, Stack } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
-import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useGitHubApi } from "../../context/GitHubApiProvider";
+import { useRouteParams } from "../../lib/hooks";
 
 interface EditButtonPanelProps {
   disabled: boolean;
@@ -28,11 +29,12 @@ export default function EditButtonPanel({
 }: EditButtonPanelProps) {
   const theme = useTheme();
   const { gitHubToken } = useGitHubApi();
-  const { pathname } = useLocation();
+  const history = useHistory();
+  const { repo, branch, path } = useRouteParams();
 
-  const parts = pathname.split("/");
-  parts[4] = "viewer";
-  const viewerLink = parts.join("/");
+  const view = () => {
+    history.push(`/repos/${repo}/viewer/${branch}/${path}`);
+  };
 
   return (
     <Paper square variant="outlined" sx={{ padding: theme.spacing(1) }}>
@@ -49,7 +51,7 @@ export default function EditButtonPanel({
         <Button
           variant="outlined"
           startIcon={<ExitToAppIcon />}
-          href={viewerLink}
+          onClick={view}
           disabled={disabled}
         >
           Viewer
