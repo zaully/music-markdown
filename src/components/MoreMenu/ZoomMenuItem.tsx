@@ -36,25 +36,6 @@ export default function ZoomMenuItem() {
   return (
     <Box>
       <Typography variant="subtitle1">Zoom</Typography>
-      <Stack spacing={1} direction="row" alignItems="center" paddingBottom={4}>
-        <ZoomOutIcon />
-        <Slider
-          aria-label="Zoom"
-          value={Math.log2(zoom)}
-          onChange={(_, newValue) => {
-            if (typeof newValue !== "number") return;
-            setZoom(calculateValue(newValue));
-          }}
-          min={-2}
-          max={2}
-          step={0.01}
-          scale={calculateValue}
-          valueLabelFormat={valueLabelFormat}
-          valueLabelDisplay="auto"
-          marks={marks}
-        />
-        <ZoomInIcon />
-      </Stack>
       <Stack
         direction="row"
         spacing={1}

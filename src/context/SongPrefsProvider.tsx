@@ -4,7 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useLocalStorage, useRouteParams } from "../lib/hooks";
 
 interface SongPref {
-  columns: number;
+  columns?: string;
   transpose: number;
   zoom: number;
 }
@@ -42,7 +42,7 @@ export const SongPrefsProvider: FC<SongPrefsProviderProps> = ({ children }) => {
 function update(
   prevSongPrefs: SongPrefs,
   song: string,
-  field: "columns" | "transpose" | "zoom",
+  field: "transpose" | "zoom",
   newVal: number,
   defaultVal: number
 ) {
@@ -61,13 +61,35 @@ function update(
   return songPrefs;
 }
 
+function updateColumns(
+  prevSongPrefs: SongPrefs,
+  song: string,
+  // field: "columns",
+  newVal: string,
+  defaultVal: string
+) {
+  const songPrefs = { ...prevSongPrefs };
+  const songPref = songPrefs[song] || {};
+
+  if (newVal === defaultVal) {
+    delete songPref["columns"];
+  } else {
+    songPref["columns"] = newVal;
+    songPrefs[song] = songPref;
+  }
+  if (Object.keys(songPref).length === 0) {
+    delete songPrefs[song];
+  }
+  return songPrefs;
+}
+
 export function useSong() {
   const { repo, branch, path } = useRouteParams();
   return `${repo}/${branch}/${path}`;
 }
 
 export function useSongPref(
-  fieldName: "columns" | "transpose" | "zoom",
+  fieldName: "transpose" | "zoom",
   defaultValue: number
 ): [number, (newValue: number) => void] {
   const { songPrefs, setSongPrefs } = useSongPrefs();
@@ -81,8 +103,23 @@ export function useSongPref(
   return [fieldValue, setFieldValue];
 }
 
+export function useSongPrefColumns(
+  // fieldName: "columns",
+  defaultValue: string
+): [string, (newValue: string) => void] {
+  const { songPrefs, setSongPrefs } = useSongPrefs();
+  const song = useSong();
+  const songPref = songPrefs[song] || {};
+
+  const fieldValue = songPref["columns"] || defaultValue;
+  const setFieldValue = (newValue: string) =>
+    setSongPrefs(updateColumns(songPrefs, song, newValue, defaultValue));
+
+  return [fieldValue, setFieldValue];
+}
+
 export function useColumns() {
-  const [columns, setColumns] = useSongPref("columns", 1);
+  const [columns, setColumns] = useSongPrefColumns("1");
   return { columns, setColumns };
 }
 

@@ -19,19 +19,19 @@ export default function ThemeMenuItem() {
         exclusive
         onChange={(event, newThemeName) => setThemeName(newThemeName)}
       >
-        <ToggleButton value="light">
+        <ToggleButton size="small" value="light">
           <Stack spacing={1} direction="row">
             <LightModeIcon />
             <Typography variant="button">Light</Typography>
           </Stack>
         </ToggleButton>
-        <ToggleButton value="system">
+        <ToggleButton size="small" value="system">
           <Stack spacing={1} direction="row">
             <SettingsBrightnessIcon />
             <Typography variant="button">System</Typography>
           </Stack>
         </ToggleButton>
-        <ToggleButton value="dark">
+        <ToggleButton size="small" value="dark">
           <Stack spacing={1} direction="row">
             <DarkModeIcon />
             <Typography variant="button">Dark</Typography>

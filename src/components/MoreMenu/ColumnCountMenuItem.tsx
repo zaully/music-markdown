@@ -16,8 +16,8 @@ export default function ColumnCountMenuItem() {
         exclusive
         onChange={(_, newColumns) => setColumns(newColumns)}
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((columnCount) => (
-          <ToggleButton value={columnCount} key={columnCount}>
+        {["1v", '1', '2', '3', '4'].map((columnCount) => (
+          <ToggleButton size="small" value={columnCount} key={columnCount}>
             {columnCount}
           </ToggleButton>
         ))}

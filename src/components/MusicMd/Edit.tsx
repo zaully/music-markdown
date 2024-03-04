@@ -78,7 +78,7 @@ export default function Edit() {
           <ViewPaper variant="outlined" square>
             <Render
               source={debouncedMarkdown}
-              columns={1}
+              columns={"1v"}
               transpose={transpose}
               zoom={1}
               instrumentsConfig={config}

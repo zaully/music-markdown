@@ -19,7 +19,7 @@ const DivColumns = styled("div")(({ theme }) => ({
 interface MusicMarkdownRenderProps {
   source: string;
   width: number;
-  columns: number;
+  columns: string;
   transpose: number;
   instrumentsConfig: InstrumentsConfig;
 }
@@ -62,7 +62,8 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     ) as MarkdownItWithMMD;
     md.setTranspose(transpose);
     md.setTheme(theme.palette.mode);
-    md.setMaxWidth((width - COLUMN_GAP * (columns - 1)) / columns);
+    const columnsNumber: number = +columns.replace(/[^0-9]/g, '');
+    md.setMaxWidth((width - COLUMN_GAP * (columnsNumber - 1)) / columnsNumber);
     md.setInstrumentsConfig(instrumentsConfig);
     try {
       setHtml(md.render(source));
@@ -90,7 +91,29 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
     window.eval(script[1]);
   }
 
+  const scrollDirection = columns.replace(/[0-9]/g, '');
   /* TODO: Replace this hack with an iframe. */
+  if (scrollDirection.length == 0) {
+    return (
+      <div
+        onClick={handleClick}
+        className={`mmd-${theme.palette.mode}`}
+        style={{
+          flexDirection: "column",
+          columnGap: "20px",
+          display: "flex",
+          alignContent: "flex-start",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          height: "100vh",
+          scrollSnapType: "x mandatory",
+          overflowX: "auto",
+          overflowY: "hidden"
+        }}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
+  }
   return (
     <div
       onClick={handleClick}
@@ -107,7 +130,7 @@ export interface InstrumentsConfig {
 
 interface RenderProps {
   source: string;
-  columns: number;
+  columns: string;
   zoom: number;
   transpose: number;
   instrumentsConfig: InstrumentsConfig;
@@ -118,6 +141,26 @@ export function Render(props: RenderProps) {
   const { zoom } = props;
   const { width } = useContainerDimensions(componentRef, zoom);
 
+  const scrollDirection = props.columns.replace(/[0-9]/g, '');
+
+  if (scrollDirection.length == 0) {
+    return (
+      <div
+        style={{
+          transform: `scale(${zoom})`,
+          transformOrigin: "0 0",
+          width: `${100 / zoom}%`,
+        }}
+      >
+      <DivColumns ref={componentRef} style={{
+        overflowY: "hidden",
+        overflowX: "auto"
+      }}>
+        <MusicMarkdownRender width={width} {...props} />
+      </DivColumns>
+      </div>
+    );
+  }
   return (
     <div
       style={{
@@ -126,9 +169,9 @@ export function Render(props: RenderProps) {
         width: `${100 / zoom}%`,
       }}
     >
-      <DivColumns style={{ columns: props.columns }} ref={componentRef}>
-        <MusicMarkdownRender width={width} {...props} />
-      </DivColumns>
+    <DivColumns ref={componentRef}>
+      <MusicMarkdownRender width={width} {...props} />
+    </DivColumns>
     </div>
   );
 }

@@ -46,7 +46,7 @@ export default function InstrumentsToRenderMenuItem() {
               onChange={(_, newColumns) => {updateFunction(newColumns, index)}}
             >
               {config.map((instrument)=>(
-                <ToggleButton value={instrument} key={instrument.name} sx={{width: 1/itemCountPerLine}}>
+                <ToggleButton size="small" value={instrument} key={instrument.name} sx={{width: 1/itemCountPerLine}}>
                   {instrument.name}
                 </ToggleButton>
               ))}
