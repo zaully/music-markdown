@@ -96,7 +96,6 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   if (scrollDirection.length == 0) {
     return (
       <div
-        onClick={handleClick}
         className={`mmd-${theme.palette.mode}`}
         style={{
           flexDirection: "column",
@@ -152,10 +151,7 @@ export function Render(props: RenderProps) {
           width: `${100 / zoom}%`,
         }}
       >
-      <DivColumns ref={componentRef} style={{
-        overflowY: "hidden",
-        overflowX: "auto"
-      }}>
+      <DivColumns ref={componentRef}>
         <MusicMarkdownRender width={width} {...props} />
       </DivColumns>
       </div>
