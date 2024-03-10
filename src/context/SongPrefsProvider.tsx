@@ -4,9 +4,9 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useLocalStorage, useRouteParams } from "../lib/hooks";
 
 interface SongPref {
-  columns?: string;
-  transpose: number;
-  zoom: number;
+  columns: string;
+  transpose: string;
+  zoom?: number;
 }
 
 interface SongPrefs {
@@ -42,7 +42,7 @@ export const SongPrefsProvider: FC<SongPrefsProviderProps> = ({ children }) => {
 function update(
   prevSongPrefs: SongPrefs,
   song: string,
-  field: "transpose" | "zoom",
+  field: "zoom",
   newVal: number,
   defaultVal: number
 ) {
@@ -61,10 +61,10 @@ function update(
   return songPrefs;
 }
 
-function updateColumns(
+function updateString(
   prevSongPrefs: SongPrefs,
   song: string,
-  // field: "columns",
+  field: "transpose" | "columns",
   newVal: string,
   defaultVal: string
 ) {
@@ -72,9 +72,9 @@ function updateColumns(
   const songPref = songPrefs[song] || {};
 
   if (newVal === defaultVal) {
-    delete songPref["columns"];
+    delete songPref[field];
   } else {
-    songPref["columns"] = newVal;
+    songPref[field] = newVal;
     songPrefs[song] = songPref;
   }
   if (Object.keys(songPref).length === 0) {
@@ -89,7 +89,7 @@ export function useSong() {
 }
 
 export function useSongPref(
-  fieldName: "transpose" | "zoom",
+  fieldName: "zoom",
   defaultValue: number
 ): [number, (newValue: number) => void] {
   const { songPrefs, setSongPrefs } = useSongPrefs();
@@ -103,33 +103,33 @@ export function useSongPref(
   return [fieldValue, setFieldValue];
 }
 
-export function useSongPrefColumns(
-  // fieldName: "columns",
+export function useSongPrefString(
+  fieldName: "columns" | "transpose",
   defaultValue: string
 ): [string, (newValue: string) => void] {
   const { songPrefs, setSongPrefs } = useSongPrefs();
   const song = useSong();
   const songPref = songPrefs[song] || {};
 
-  const fieldValue = songPref["columns"] || defaultValue;
+  const fieldValue = songPref[fieldName] || defaultValue;
   const setFieldValue = (newValue: string) =>
-    setSongPrefs(updateColumns(songPrefs, song, newValue, defaultValue));
+    setSongPrefs(updateString(songPrefs, song, fieldName, newValue, defaultValue));
 
   return [fieldValue, setFieldValue];
 }
 
 export function useColumns() {
-  const [columns, setColumns] = useSongPrefColumns("1");
+  const [columns, setColumns] = useSongPrefString("columns", "1");
   return { columns, setColumns };
 }
 
-function useTransposeQuery(): [number, (transpose: number) => void] {
+function useTransposeQuery(): [string, (transpose: string) => void] {
   const { search } = useLocation();
   const history = useHistory();
   const params = queryString.parse(search);
-  const transposeQuery = Number(params["transpose"]);
+  const transposeQuery = String(params["transpose"]);
 
-  const setTransposeQuery = (transpose: number) => {
+  const setTransposeQuery = (transpose: string) => {
     params["transpose"] = String(transpose);
     history.replace({ search: queryString.stringify(params) });
   };
@@ -139,15 +139,17 @@ function useTransposeQuery(): [number, (transpose: number) => void] {
 
 export function useTranspose() {
   const [transposeQuery, setTransposeQuery] = useTransposeQuery();
-  const [transposePref, setTransposePref] = useSongPref("transpose", 0);
+  const [transposePref, setTransposePref] = useSongPrefString("transpose", "0");
 
-  const setTranspose = (transpose: number) => {
+  const setTranspose = (transpose: string) => {
     setTransposeQuery(transpose);
     setTransposePref(transpose);
   };
 
   useEffect(() => {
-    if (isNaN(transposeQuery)) {
+    const transposeNumber: number = +transposeQuery.replace(/[^0-9-]/g, '');
+    const transposeSharpFlatPref: string = transposeQuery.replace(/[0-9-]/g, '');
+    if (Math.abs(transposeNumber) > 12 || (transposeSharpFlatPref !== '#' && transposeSharpFlatPref !== 'b' && transposeSharpFlatPref !== '')) {
       setTransposeQuery(transposePref);
     } else if (transposeQuery !== transposePref) {
       setTransposePref(transposeQuery);

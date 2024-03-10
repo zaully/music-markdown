@@ -20,12 +20,12 @@ interface MusicMarkdownRenderProps {
   source: string;
   width: number;
   columns: string;
-  transpose: number;
+  transpose: string;
   instrumentsConfig: InstrumentsConfig;
 }
 
 interface MarkdownItWithMMD extends MarkdownIt {
-  setTranspose: (transpose: number) => void;
+  setTranspose: (transpose: string) => void;
   setTheme: (theme: string) => void;
   setMaxWidth: (maxWidth: number) => void;
   setInstrumentsConfig: (instrumentsConfig: InstrumentsConfig) => void;
@@ -93,7 +93,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
 
   const scrollDirection = columns.replace(/[0-9]/g, '');
   /* TODO: Replace this hack with an iframe. */
-  if (scrollDirection.length == 0) {
+  if (scrollDirection.length === 0) {
     return (
       <div
         className={`mmd-${theme.palette.mode}`}
@@ -131,7 +131,7 @@ interface RenderProps {
   source: string;
   columns: string;
   zoom: number;
-  transpose: number;
+  transpose: string;
   instrumentsConfig: InstrumentsConfig;
 }
 
@@ -142,7 +142,7 @@ export function Render(props: RenderProps) {
 
   const scrollDirection = props.columns.replace(/[0-9]/g, '');
 
-  if (scrollDirection.length == 0) {
+  if (scrollDirection.length === 0) {
     return (
       <div
         style={{

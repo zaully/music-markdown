@@ -162,7 +162,7 @@ export function useTrees(repo: string, branch: string) {
     EMPTY_TREES
   );
   const files = value.tree.filter((tree) => {
-    return tree.path.length > 0 && tree.path[0] != '.';
+    return tree.path.length > 0 && tree.path[0] !== '.';
   }).map((tree) => tree.path);
   return { loading, value, files };
 }

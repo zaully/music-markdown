@@ -41,12 +41,13 @@ export default function InstrumentsToRenderMenuItem() {
         <Typography variant="subtitle1">Instruments Displayed</Typography>
         {buttonGroupConfig.map((config, index) => (
             <ToggleButtonGroup
+              key={index}
               fullWidth
               value={config.filter((instrument) => instrument.rendering)}
               onChange={(_, newColumns) => {updateFunction(newColumns, index)}}
             >
               {config.map((instrument)=>(
-                <ToggleButton size="small" value={instrument} key={instrument.name} sx={{width: 1/itemCountPerLine}}>
+                <ToggleButton  key={instrument.name} size="small" value={instrument} sx={{width: 1/itemCountPerLine}} style={{textTransform: 'none'}}>
                   {instrument.name}
                 </ToggleButton>
               ))}
