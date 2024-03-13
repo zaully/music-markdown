@@ -9,10 +9,11 @@ import { useRouteParams } from "../../lib/hooks";
 import { Render, InstrumentsConfig } from "./Render";
 import { useGlobalUserPrefInstrumentsToRender, useGlobalUserPrefZoom } from "../../context/GlobalUserPrefProvider";
 import DirectoryBreadcrumbs from "../DirectoryBreadcrumbs";
+import { Height } from "@mui/icons-material";
 
 const DivRoot = styled("div")({
   flexGrow: 1,
-  padding: 8,
+  padding: 8
 });
 
 export default function View() {
@@ -39,6 +40,23 @@ export default function View() {
   const config: InstrumentsConfig = {
     instrumentsToRender: rendering,
     instrumentsSupported: supported
+  }
+  const scrollDirection = columns.replace(/[0-9]/g, '');
+  if (scrollDirection.length === 0) {
+    return (
+      <>
+        <DirectoryBreadcrumbs />
+        <DivRoot style={{height: `${window.innerHeight - 124}px`}}>
+          <Render
+            source={content}
+            columns={columns}
+            transpose={transpose}
+            zoom={zoom}
+            instrumentsConfig={config}
+          />
+        </DivRoot>
+      </>
+    );
   }
 
   return (

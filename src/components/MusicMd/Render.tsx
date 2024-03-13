@@ -20,6 +20,7 @@ interface MusicMarkdownRenderProps {
   source: string;
   width: number;
   columns: string;
+  zoom: number;
   transpose: string;
   instrumentsConfig: InstrumentsConfig;
 }
@@ -38,6 +39,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
   source,
   width,
   columns,
+  zoom,
   transpose,
   instrumentsConfig,
 }) => {
@@ -104,7 +106,7 @@ const MusicMarkdownRender: FC<MusicMarkdownRenderProps> = ({
           alignContent: "flex-start",
           alignItems: "flex-start",
           flexWrap: "wrap",
-          height: "100vh",
+          height: `${(window.innerHeight - 124)/zoom}px`,
           scrollSnapType: "x mandatory",
           overflowX: "auto",
           overflowY: "hidden"
