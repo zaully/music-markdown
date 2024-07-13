@@ -1,4 +1,3 @@
-
 import { createContext, FC, useContext } from "react";
 import { useLocalStorage, useRouteParams } from "../lib/hooks";
 
@@ -11,6 +10,7 @@ export interface InstrumentToRender {
 interface GlobalUserPref {
   instruments?: InstrumentToRender[];
   zoom?: number;
+  columns?: string;
 }
 
 interface GlobalUserPrefs {
@@ -33,11 +33,18 @@ interface GlobalUserPrefsProviderProps {
   children: React.ReactNode;
 }
 
-export const GlobalUserPrefsProvider: FC<GlobalUserPrefsProviderProps> = ({ children }) => {
-  const [globalUserPrefs, setGlobalUserPrefs] = useLocalStorage("globalUserPrefs", {});
+export const GlobalUserPrefsProvider: FC<GlobalUserPrefsProviderProps> = ({
+  children,
+}) => {
+  const [globalUserPrefs, setGlobalUserPrefs] = useLocalStorage(
+    "globalUserPrefs",
+    {}
+  );
 
   return (
-    <GlobalUserPrefsContext.Provider value={{ globalUserPrefs, setGlobalUserPrefs }}>
+    <GlobalUserPrefsContext.Provider
+      value={{ globalUserPrefs, setGlobalUserPrefs }}
+    >
       {children}
     </GlobalUserPrefsContext.Provider>
   );
@@ -83,6 +90,26 @@ function updateZoom(
   return prefs;
 }
 
+function updateColumns(
+  prevGlobalUserPrefs: GlobalUserPrefs,
+  newVal: string,
+  defaultVal: string
+) {
+  const prefs = { ...prevGlobalUserPrefs };
+  const prefConfig = prefs["prefs"] || {};
+
+  if (newVal === defaultVal) {
+    delete prefConfig.columns;
+  } else {
+    prefConfig.columns = newVal;
+    prefs["prefs"] = prefConfig;
+  }
+  if (Object.keys(prefConfig).length === 0) {
+    delete prefs["prefs"];
+  }
+  return prefs;
+}
+
 export function useGlobalUser() {
   const { repo, branch } = useRouteParams();
   return `${repo}/${branch}globalUser`;
@@ -99,6 +126,20 @@ export function useGlobalUserPrefZoom(): [number, (newValue: number) => void] {
   return [fieldValue, setFieldValue];
 }
 
+export function useGlobalUserPrefColumns(): [
+  string,
+  (newValue: string) => void
+] {
+  const { globalUserPrefs, setGlobalUserPrefs } = useGlobalUserPrefs();
+  const globalUserPrefsConfig = globalUserPrefs["prefs"] || {};
+
+  const fieldValue = globalUserPrefsConfig.columns || "1";
+  const setFieldValue = (newValue: string) =>
+    setGlobalUserPrefs(updateColumns(globalUserPrefs, newValue, "1"));
+
+  return [fieldValue, setFieldValue];
+}
+
 export function useGlobalUserPrefInstrumentsToRender(
   defaultValue?: InstrumentToRender[]
 ): [InstrumentToRender[], (newValue: InstrumentToRender[]) => void] {
@@ -106,23 +147,25 @@ export function useGlobalUserPrefInstrumentsToRender(
   const globalUserPrefsConfig = globalUserPrefs["prefs"] || {};
 
   const defaultInstruments = [
-    {name: "Chords", code: "c1", rendering: true},
-    {name: "Lyrics1", code: "l1", rendering: true},
-    {name: "Lyrics2", code: "l2", rendering: true},
-    {name: "Notes", code: "l3", rendering: true},
-    {name: "Gt.", code: "l4", rendering: true},
-    {name: "Kb.", code: "l5", rendering: true},
-    {name: "Ba.", code: "l6", rendering: true},
-    {name: "Dr.", code: "l7", rendering: true}
+    { name: "Chords", code: "c1", rendering: true },
+    { name: "Lyrics1", code: "l1", rendering: true },
+    { name: "Lyrics2", code: "l2", rendering: true },
+    { name: "Notes", code: "l3", rendering: true },
+    { name: "Gt.", code: "l4", rendering: true },
+    { name: "Kb.", code: "l5", rendering: true },
+    { name: "Ba.", code: "l6", rendering: true },
+    { name: "Dr.", code: "l7", rendering: true },
   ];
 
-  let fieldValue = globalUserPrefsConfig.instruments
+  let fieldValue = globalUserPrefsConfig.instruments;
   if (fieldValue == null || fieldValue.length !== defaultInstruments.length) {
     fieldValue = defaultInstruments;
   }
   const setFieldValue = (newValue: InstrumentToRender[]) => {
-    setGlobalUserPrefs(updateInstrumentsToRender(globalUserPrefs, newValue, defaultValue));
-  }
+    setGlobalUserPrefs(
+      updateInstrumentsToRender(globalUserPrefs, newValue, defaultValue)
+    );
+  };
 
   return [fieldValue, setFieldValue];
 }

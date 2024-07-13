@@ -2,12 +2,11 @@ import styled from "@emotion/styled";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useFileContent } from "../../context/GitHubApiProvider";
 import {
-  useColumns,
   useTranspose,
 } from "../../context/SongPrefsProvider";
 import { useRouteParams } from "../../lib/hooks";
 import { Render, InstrumentsConfig } from "./Render";
-import { useGlobalUserPrefInstrumentsToRender, useGlobalUserPrefZoom } from "../../context/GlobalUserPrefProvider";
+import { useGlobalUserPrefInstrumentsToRender, useGlobalUserPrefZoom, useGlobalUserPrefColumns } from "../../context/GlobalUserPrefProvider";
 import DirectoryBreadcrumbs from "../DirectoryBreadcrumbs";
 import { Height } from "@mui/icons-material";
 
@@ -19,9 +18,9 @@ const DivRoot = styled("div")({
 export default function View() {
   const { repo, path, branch } = useRouteParams();
   const { loading, content } = useFileContent(repo, path, branch);
-  const { columns } = useColumns();
   const { transpose } = useTranspose();
   const [zoom] = useGlobalUserPrefZoom();
+  const [columns] = useGlobalUserPrefColumns();
   const [instruments] = useGlobalUserPrefInstrumentsToRender();
 
   if (loading) {

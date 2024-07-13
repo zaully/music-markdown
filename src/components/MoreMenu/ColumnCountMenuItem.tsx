@@ -2,10 +2,10 @@ import { Typography } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Box } from "@mui/system";
-import { useColumns } from "../../context/SongPrefsProvider";
+import { useGlobalUserPrefColumns } from "../../context/GlobalUserPrefProvider";
 
 export default function ColumnCountMenuItem() {
-  const { columns, setColumns } = useColumns();
+  const [columns, setColumns] = useGlobalUserPrefColumns();
 
   return (
     <Box>
@@ -16,7 +16,7 @@ export default function ColumnCountMenuItem() {
         exclusive
         onChange={(_, newColumns) => setColumns(newColumns)}
       >
-        {["1v", '1', '2', '3', '4'].map((columnCount) => (
+        {["1v", "1", "2", "3", "4"].map((columnCount) => (
           <ToggleButton size="small" value={columnCount} key={columnCount}>
             {columnCount}
           </ToggleButton>
